@@ -10,4 +10,5 @@ public interface UserDetailsService {
 	UserDetails getUserFromSession(long id);
 	UserDetails loadUserFromSession(long id);
 	List<UserDetails> getAllUsers();
+	int countUsers();
 }

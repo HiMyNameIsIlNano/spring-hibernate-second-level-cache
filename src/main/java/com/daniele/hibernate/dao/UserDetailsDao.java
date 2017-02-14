@@ -10,4 +10,5 @@ public interface UserDetailsDao {
 	UserDetails getUserFromSession(long id);
 	UserDetails loadUserFromSession(long id);
 	List<UserDetails> getAllUsers();
+	int countUsers();
 }

@@ -2,10 +2,13 @@ package com.daniele.hibernate.dao.impl;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,16 @@ import com.daniele.hibernate.model.UserDetails;
 public class UserDetailsDaoImpl implements UserDetailsDao {
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	DataSource dataSource;
+
+	private JdbcTemplate jdbcTemplate;
+    
+	@Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 	
 	@Override
 	public void insertDummyData(int nRecords) {
@@ -61,6 +74,12 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 	}
 	
 	@Override
+	public int countUsers() {
+		String sql = "SELECT COUNT(*) FROM USER_DETAILS";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+	
+	@Override
 	public UserDetails loadUserFromSession(long id) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		if  (currentSession.isOpen()) {
@@ -71,6 +90,4 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		return null;
 		
 	}
-	
-	
 }

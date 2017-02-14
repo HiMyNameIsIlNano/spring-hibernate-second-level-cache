@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.daniele.hibernate.dao.UserDetailsDao;
@@ -41,5 +40,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public List<UserDetails> getAllUsers() {
 		return userDetailsDao.getAllUsers();
+	}
+	
+	@Override
+	public int countUsers() {
+		return userDetailsDao.countUsers();
 	}
 }

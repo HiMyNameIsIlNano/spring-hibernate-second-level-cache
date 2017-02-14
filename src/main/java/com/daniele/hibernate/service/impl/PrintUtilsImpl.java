@@ -14,8 +14,9 @@ public class PrintUtilsImpl implements PrintUtils {
 	SessionFactory sessionFactory;
 	
 	@Override
-	public void printStats() {
+	public void printStats(int i) {
 		Statistics stats = sessionFactory.getStatistics();
+		System.out.println("******** Execution: " + i + " ********");
 		System.out.println("Fetch Count=" + stats.getEntityFetchCount());
 		System.out.println("Second Level Hit Count=" + stats.getSecondLevelCacheHitCount());
 		System.out.println("Second Level Miss Count=" + stats.getSecondLevelCacheMissCount());
@@ -25,6 +26,6 @@ public class PrintUtilsImpl implements PrintUtils {
 	@Override
 	public void printData(UserDetails user, int count) {
 		System.out.println(count + ":: Name= " + user.getName() + ", Zipcode= " + user.getAddress().getZipcode());
-		printStats();
+		printStats(count);
 	}
 }
