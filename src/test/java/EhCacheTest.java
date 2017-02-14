@@ -1,30 +1,23 @@
-import java.util.List;
-
+import org.hibernate.stat.Statistics;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.StopWatch;
 
 import com.daniele.hibernate.model.UserDetails;
 import com.daniele.hibernate.service.UserDetailsService;
-import com.daniele.hibernate.service.impl.PrintUtils;
+import com.daniele.hibernate.service.impl.StatisticsUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext-test.xml" })
-public class EhCacheTest {  
+public class EhCacheTest extends BaseDbTest {  
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
     @Autowired
-    private PrintUtils printUtils;
+    private StatisticsUtils statisticsUtils;
     
     private TransactionTemplate transaction;
     
@@ -38,38 +31,34 @@ public class EhCacheTest {
         Assert.assertEquals(5, userDetailsService.countUsers());
     }
     
-    /*@Test
+    @Test
+    public void testfindUser() {
+        Assert.assertEquals(1, userDetailsService.getUserById(1).getId());
+    }
+    
+    @Test
     public void testCache() {
-    	// Using programmatic transaction management since we need 2 transactions
-        // inside the same method
-        
-        // The first attempt should drag a User into the 1st Level Cache
+    	// The first attempt should drag a User into the 1st Level Cache
         transaction.execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
-                testCacheNew();
+            	UserDetails user = userDetailsService.getUserById(1);
+                Assert.assertNotNull(user);
+            	Statistics statistics = statisticsUtils.getStatitstics();
+                Assert.assertTrue(statistics.getEntityFetchCount() == 0);
+                Assert.assertTrue(statistics.getSecondLevelCacheHitCount() == 0);
+                Assert.assertTrue(statistics.getSecondLevelCacheMissCount() == 0);
+                Assert.assertTrue(statistics.getSecondLevelCachePutCount() == 0);
             }
         });
         
         // The second attempt should hit the 2nd Level Cache
         transaction.execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
-            	testCacheNew();
+            	UserDetails user = userDetailsService.getUserById(1);
+            	Assert.assertNotNull(user);
+            	Statistics statistics = statisticsUtils.getStatitstics();
+                Assert.assertTrue(statistics.getSecondLevelCacheHitCount() > 0);
             }
         });
-    }*/
-
-    public void testCacheNew() {
-        UserDetails user = userDetailsService.getUserById(1);
-        Assert.assertNotNull(user);
-     }
-    
-    public void testCache(int i) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        UserDetails user = userDetailsService.getUserById(1);
-        stopWatch.stop();
-        System.out.println("Query time : " + stopWatch.getTotalTimeSeconds());
-        System.out.println(user.toString());
-        printUtils.printStats(i);
-     }      
- }
+    }
+}

@@ -8,13 +8,18 @@ import org.springframework.stereotype.Service;
 import com.daniele.hibernate.model.UserDetails;
 
 @Service
-public class PrintUtilsImpl implements PrintUtils {
+public class StatisticsUtilsImpl implements StatisticsUtils {
 	
 	@Autowired
 	SessionFactory sessionFactory;
 	
 	@Override
-	public void printStats(int i) {
+	public Statistics getStatitstics() {
+		return sessionFactory.getStatistics();
+	}
+	
+	@Override
+	public void printStatitstics(int i) {
 		Statistics stats = sessionFactory.getStatistics();
 		System.out.println("******** Execution: " + i + " ********");
 		System.out.println("Fetch Count=" + stats.getEntityFetchCount());
@@ -26,6 +31,6 @@ public class PrintUtilsImpl implements PrintUtils {
 	@Override
 	public void printData(UserDetails user, int count) {
 		System.out.println(count + ":: Name= " + user.getName() + ", Zipcode= " + user.getAddress().getZipcode());
-		printStats(count);
+		printStatitstics(count);
 	}
 }

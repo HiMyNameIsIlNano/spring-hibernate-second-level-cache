@@ -1,8 +1,11 @@
 package com.daniele.hibernate.service.impl;
 
+import org.hibernate.stat.Statistics;
+
 import com.daniele.hibernate.model.UserDetails;
 
-public interface PrintUtils {
+public interface StatisticsUtils {
 	void printData(UserDetails user, int count);
-	void printStats(int i);
+	void printStatitstics(int i);
+	Statistics getStatitstics();
 }
