@@ -8,8 +8,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.daniele.hibernate.model.UserDetails;
+import com.daniele.hibernate.service.StatisticsUtils;
 import com.daniele.hibernate.service.UserDetailsService;
-import com.daniele.hibernate.service.impl.StatisticsUtils;
 
 public class EhCacheTest extends BaseDbTest {  
 	
@@ -41,23 +41,26 @@ public class EhCacheTest extends BaseDbTest {
     	// The first attempt should drag a User into the 1st Level Cache
         transaction.execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
-            	UserDetails user = userDetailsService.getUserById(1);
-                Assert.assertNotNull(user);
             	Statistics statistics = statisticsUtils.getStatitstics();
-                Assert.assertTrue(statistics.getEntityFetchCount() == 0);
+            	statistics.setStatisticsEnabled(true);
+            	Assert.assertTrue(statisticsUtils.isStatitsticsEnabled());
+            	            	
+            	UserDetails user = userDetailsService.getUserById(1);
+            	Assert.assertNotNull(user);
                 Assert.assertTrue(statistics.getSecondLevelCacheHitCount() == 0);
-                Assert.assertTrue(statistics.getSecondLevelCacheMissCount() == 0);
-                Assert.assertTrue(statistics.getSecondLevelCachePutCount() == 0);
             }
         });
         
         // The second attempt should hit the 2nd Level Cache
         transaction.execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
+            	Statistics statistics = statisticsUtils.getStatitstics();
+            	statistics.setStatisticsEnabled(true);
+            	Assert.assertTrue(statisticsUtils.isStatitsticsEnabled());
+            	            	
             	UserDetails user = userDetailsService.getUserById(1);
             	Assert.assertNotNull(user);
-            	Statistics statistics = statisticsUtils.getStatitstics();
-                Assert.assertTrue(statistics.getSecondLevelCacheHitCount() > 0);
+                Assert.assertTrue(statistics.getSecondLevelCacheHitCount() == 1);
             }
         });
     }

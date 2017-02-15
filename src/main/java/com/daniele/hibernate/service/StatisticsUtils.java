@@ -1,4 +1,4 @@
-package com.daniele.hibernate.service.impl;
+package com.daniele.hibernate.service;
 
 import org.hibernate.stat.Statistics;
 
@@ -8,4 +8,5 @@ public interface StatisticsUtils {
 	void printData(UserDetails user, int count);
 	void printStatitstics(int i);
 	Statistics getStatitstics();
+	boolean isStatitsticsEnabled();
 }

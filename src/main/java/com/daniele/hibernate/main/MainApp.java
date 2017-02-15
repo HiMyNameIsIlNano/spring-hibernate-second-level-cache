@@ -28,7 +28,6 @@ public class MainApp {
 			address.setStreet("Dummy Street N." + i);
 			address.setZipcode("9009" + i);
 			
-			
 			UserDetails user = new UserDetails();
 			user.setName("User" + i);
 			user.setDescription("Description field " + i);
