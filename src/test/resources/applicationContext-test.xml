@@ -16,7 +16,9 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager"
 		mode="proxy" proxy-target-class="true" />
-
+		
+	<context:property-placeholder location="classpath:config/hibernate.properties" />
+		
 	<jdbc:embedded-database id="dataSource" type="H2">
 		<jdbc:script location="classpath:create-schema.sql" />
 		<jdbc:script location="classpath:insert-data.sql" />
@@ -31,8 +33,13 @@
 		<property name="packagesToScan" value="com.daniele.hibernate.model" />
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">${net.sf.ehcache.configurationResourceName}</prop>
 			</props>
 		</property>
 	</bean>

@@ -33,23 +33,9 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
     }
 	
 	@Override
-	public void insertDummyData(int nRecords) {
+	public void saveUserDetails(UserDetails userDetails) {
 		Session session = sessionFactory.getCurrentSession();
-		for (int i = 1; i <= nRecords; i++) {
-			UserDetails user = new UserDetails();
-			user.setName("User" + i);
-			user.setDescription("Description field " + i);
-			
-			Address address = new Address();
-			address.setCity("City" + i);
-			address.setStreet("Dummy Street N." + i);
-			address.setZipcode("9009" + i);
-			address.setUserDetails(user);
-			
-			user.setAddress(address);
-			session.save(user);
-			System.out.println("Saving user" + i);
-		}
+		session.save(userDetails);
 	}
 	
 	@Override

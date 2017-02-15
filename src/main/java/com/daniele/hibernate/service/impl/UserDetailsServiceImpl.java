@@ -18,8 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	UserDetailsDao userDetailsDao;
 	
 	@Override
-	public void insertDummyData(int nRecords) { 
-		userDetailsDao.insertDummyData(nRecords);
+	public void saveUserDetails(UserDetails userDetails) { 
+		userDetailsDao.saveUserDetails(userDetails);
 	}
 	
 	@Override
